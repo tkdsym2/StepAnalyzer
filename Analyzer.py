@@ -10,11 +10,6 @@ noun_filters = [POSKeepFilter(['名詞'])]
 noun_analyzer = Analyzer([], token, noun_filters)
 
 
-# load text file
-# f = open(input_file)
-# description = f.read()
-# f.close()
-
 def GetAllKeyword(text):  # 文章全体のkeyword
     _nouns = [token.surface.split(',')[0]
               for token in noun_analyzer.analyze(text)]
@@ -37,7 +32,6 @@ def GetKeyword(array_description):  # それぞれの文章に含まれるkeywor
 def SplitDescription(text):
     _auxiliaries = [token.surface.split(',')[0]
                     for token in auxiliary_analyzer.analyze(text)]
-    print(_auxiliaries)
     auxiliaries = list(set(_auxiliaries))  # check doubled
     pos = []  # 助動詞の位置, 複数ある場合はまだ想定していない
     for auxiliary in auxiliaries:
@@ -49,9 +43,12 @@ def SplitDescription(text):
     return GetKeyword(splited_text)
 
 
-def AnalyzedDescription(desc=''):
-    if not desc:
+def AnalyzedDescription(file=''):
+    if not file:
         return None
+    f = open(file)
+    desc = f.read()
+    f.close()
     response = {
         'per_narration': SplitDescription(desc),
         'keywords': GetAllKeyword(desc)
