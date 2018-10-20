@@ -1,13 +1,14 @@
 import os
 from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-
+from Analyzer import AnalyzedDescription
 
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['JSON_AS_ASCII'] = False
 
 
 def allowed_file(filename):
@@ -20,7 +21,7 @@ def route():
     return 'root dir'
 
 
-@app.route('/uploads', methods=['GET', 'POST'])
+@app.route('/analyze/text', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -32,13 +33,13 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            _result = AnalyzedDescription(filepath)
             result = {
-                "result": {
-                    "upload": 'success'
-                }
+                'data': _result
             }
-            return jsonify(ResultSet=result)
+            return jsonify(result)
 
 
 # app.run(host="127.0.0.1", port=5000, debug=True)
