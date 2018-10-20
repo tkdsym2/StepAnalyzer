@@ -43,12 +43,9 @@ def SplitDescription(text):
     return GetKeyword(splited_text)
 
 
-def AnalyzedDescription(file=''):
-    if not file:
+def AnalyzedDescription(desc=''):
+    if not desc:
         return None
-    f = open(file)
-    desc = f.read()
-    f.close()
     response = {
         'per_narration': SplitDescription(desc),
         'keywords': GetAllKeyword(desc)

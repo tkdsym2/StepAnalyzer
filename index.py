@@ -2,9 +2,11 @@ import os
 from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from Analyzer import AnalyzedDescription
+from AudioToText import TranscriptNarration
 
 UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4'])
+ALLOWED_EXTENSIONS = set(
+    ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp4', 'raw'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -21,7 +23,7 @@ def route():
     return 'root dir'
 
 
-@app.route('/analyze/text', methods=['GET', 'POST'])
+@app.route('/analyze', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -35,7 +37,8 @@ def upload_file():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            _result = AnalyzedDescription(filepath)
+            _transcript = TranscriptNarration(audiofile=filename)
+            _result = AnalyzedDescription(_transcript)
             result = {
                 'data': _result
             }
