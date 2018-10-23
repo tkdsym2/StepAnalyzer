@@ -19,7 +19,7 @@ def TranscriptNarration(audiofile=''):
         audio = types.RecognitionAudio(content=content)
 
     config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        encoding=enums.RecognitionConfig.AudioEncoding.FLAC,
         sample_rate_hertz=16000,
         language_code='ja-JP'
     )
