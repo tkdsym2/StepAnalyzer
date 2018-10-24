@@ -3,6 +3,7 @@ from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from Analyzer import AnalyzedDescription
 from AudioToText import TranscriptNarration
+from ExtractAudio import GetAudio
 
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = set(
@@ -36,8 +37,9 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            _transcript = TranscriptNarration(audiofile=filename)
+            file.save(filepath)  # mp4
+            convert_file = GetAudio(filepath, filename)
+            _transcript = TranscriptNarration(audiofile=convert_file)
             _result = AnalyzedDescription(_transcript)
             result = {
                 'data': _result
