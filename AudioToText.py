@@ -8,18 +8,19 @@ def TranscriptNarration(audiofile=''):
     if not audiofile:
         return None
     client = speech.SpeechClient()  # initialize client
-    filename = os.path.join(
-        os.path.dirname(__file__),
-        'uploads',
-        audiofile
-    )
+    # filename = os.path.join(
+    #     os.path.dirname(__file__),
+    #     'resouces',
+    #     audiofile
+    # )
+    filename = audiofile
 
     with io.open(filename, 'rb') as audiofile:
         content = audiofile.read()
         audio = types.RecognitionAudio(content=content)
 
     config = types.RecognitionConfig(
-        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        encoding=enums.RecognitionConfig.AudioEncoding.FLAC,
         sample_rate_hertz=16000,
         language_code='ja-JP'
     )
