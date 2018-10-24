@@ -2,25 +2,36 @@ import os
 import sys
 import subprocess
 
-input_file = './uploads/sample.mp4'  # this is uploaded audio
-bitrate = 128  # bitrate
-# output audio filename. must to be randomized name(but, write over is good too)
-output_file = './resources/hoge.mp3'
-# converted audio file for uploading gcs from mp3 audio file
-convert_file = './resources/hoge.flac'
+# converting property
+bitrate = 128
+hz = 44100
 
-# first, mp3 is extracted from movie(mp4) file
-cmd = "ffmpeg -y -i {} -ab {}k {}".format(
-    input_file, bitrate, output_file)
-# output file
-resp = subprocess.check_output(cmd, shell=True)
-print('first step is done')
 
-# nextly, mp3 file is converted to flac file fot uploading gcs
-# here is problem
-convert = 'ffmpeg -i {} -vn -ar 44100 -ac 2 -acodec flac -f flac {}'.format(
-    output_file, convert_file
-)
-_resp = subprocess.check_output(convert, shell=True)
+def ExtractedAudio(input_file, output_file):
+    if not input_file:
+        return None
+    extracted_audio = 'ffmpeg -y -i {} -ab {}k {}'.format(
+        input_file, bitrate, output_file)
+    result = subprocess.check_output(extracted_audio, shell=True)
 
-print('second step is done')
+
+def ConvertMP3toFLAC(input_file, output_file):
+    if not input_file:
+        return None
+    print('---------converting-----------')
+    convert_audio = 'ffmpeg -i {} -vn -ar {} -ac 2 -acodec flac -f flac {}'.format(
+        input_file, hz, output_file)
+    result = subprocess.check_output(convert_audio, shell=True)
+
+
+def GetAudio(filepath, filename):
+    if not filepath:
+        return None
+    input_file = filepath
+    _filename = filename.split('.')[0]
+
+    ExtractedAudio(input_file, './mp3/{}.mp3'.format(_filename))
+
+    audio_resouce = './audiofile/{}.flac'.format(_filename)
+    ConvertMP3toFLAC('./mp3/{}.mp3'.format(_filename), audio_resouce)
+    return audio_resouce
