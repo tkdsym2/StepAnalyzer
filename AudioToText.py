@@ -4,28 +4,25 @@ from google.cloud import speech
 from google.cloud.speech import enums, types
 
 
-def TranscriptNarration(audiofile=''):
-    if not audiofile:
-        return None
-    client = speech.SpeechClient()  # initialize client
-    # filename = os.path.join(
-    #     os.path.dirname(__file__),
-    #     'resouces',
-    #     audiofile
-    # )
-    filename = audiofile
+def TranscriptNarration(gcs_uri):
+    from google.cloud import speech
+    from google.cloud.speech import enums
+    from google.cloud.speech import types
+    client = speech.SpeechClient()
 
-    with io.open(filename, 'rb') as audiofile:
-        content = audiofile.read()
-        audio = types.RecognitionAudio(content=content)
-
+    audio = types.RecognitionAudio(uri=gcs_uri)
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.FLAC,
         sample_rate_hertz=16000,
-        language_code='ja-JP'
-    )
+        language_code='ja-JP')
 
-    response = client.recognize(config, audio)
+    operation = client.long_running_recognize(config, audio)
+
+    print('Waiting for operation to complete...')
+    response = operation.result(timeout=180)
+
     for result in response.results:
+        # The first alternative is the most likely one for this portion.
         narration_text = result.alternatives[0].transcript
+        print('Confidence: {}'.format(result.alternatives[0].confidence))
     return narration_text
