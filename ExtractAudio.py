@@ -10,8 +10,8 @@ hz = 44100
 def ExtractedAudio(input_file, output_file):
     if not input_file:
         return None
-    extracted_audio = 'ffmpeg -y -i {} -ab {}k {}'.format(
-        input_file, bitrate, output_file)
+    extracted_audio = 'ffmpeg -i {} -vn  {}'.format(
+        input_file, output_file)
     result = subprocess.check_output(extracted_audio, shell=True)
 
 
@@ -19,8 +19,8 @@ def ConvertMP3toFLAC(input_file, output_file):
     if not input_file:
         return None
     print('---------converting-----------')
-    convert_audio = 'ffmpeg -i {} -vn -ar {} -ac 2 -acodec flac -f flac {}'.format(
-        input_file, hz, output_file)
+    convert_audio = 'sox {} --rate 16k --bits 16 --channels 1 {}'.format(
+        input_file, output_file)
     result = subprocess.check_output(convert_audio, shell=True)
 
 
