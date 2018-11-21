@@ -4,8 +4,10 @@ from werkzeug.utils import secure_filename
 from Analyzer import AnalyzedDescription
 from AudioToText import TranscriptNarration
 from ExtractAudio import GetAudio
-from Downloader import DownloadMovie
+from Downloader import DownloadMovie, DownloadThumb
 from UploadStorage import UploadGStorage
+from ObjectDetection import Test
+# from Yolo import detectionImage
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -18,15 +20,23 @@ def route():
 
 @app.route('/analyze', methods=['POST'])
 def upload_url():
-    url = request.form['url']
-    filepath = DownloadMovie(url)
-    filename = url.split('/')[-1].split('.')[0]
-    convert_file = GetAudio(filepath, filename)
+    movie_url = request.form['movie_url']
+    print(movie_url)
+    movie_filepath = DownloadMovie(movie_url)
+    movie_filename = movie_url.split('/')[-1].split('.')[0]
+    convert_file = GetAudio(movie_filepath, movie_filename)
     gsutilpath = UploadGStorage(convert_file)
     _transcript = TranscriptNarration(gsutilpath)
-    _result = AnalyzedDescription(_transcript)
+    transcript_result = AnalyzedDescription(_transcript)
+    # -------
+    thumb_url = request.form['thumb_url']
+    thumb_filepath = DownloadThumb(thumb_url)
+    thumb_filename = thumb_url.split('/')[-1].split('.')[0]
+    detection_result = Test(thumb_filepath)
+    # ------
     result = {
-        'data': _result
+        'transcription': transcript_result,
+        'detection': detection_result
     }
     return jsonify(result)
 
