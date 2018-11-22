@@ -30,7 +30,12 @@ def GetAudio(filepath, filename):
     input_file = filepath
     _filename = filename.split('.')[0]
 
+    if not os.path.exists('./mp3'):
+        os.makedirs('./mp3')
     ExtractedAudio(input_file, './mp3/{}.mp3'.format(_filename))
+
+    if not os.path.exists('./audiofile'):
+        os.makedirs('./audiofile')
 
     audio_resouce = './audiofile/{}.flac'.format(_filename)
     ConvertMP3toFLAC('./mp3/{}.mp3'.format(_filename), audio_resouce)
