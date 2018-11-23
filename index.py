@@ -6,8 +6,8 @@ from AudioToText import TranscriptNarration
 from ExtractAudio import GetAudio
 from Downloader import DownloadMovie, DownloadThumb
 from UploadStorage import UploadGStorage
-from ObjectDetection import Test
 # from Yolo import detectionImage
+from SanitizeResult import SanitizeResult
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
