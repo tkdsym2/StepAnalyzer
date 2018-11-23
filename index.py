@@ -8,7 +8,8 @@ from AudioToText import TranscriptNarration
 from ExtractAudio import GetAudio
 from Downloader import DownloadMovie, DownloadThumb
 from UploadStorage import UploadGStorage
-from ObjectDetection import Test
+# from Yolo import detectionImage
+from SanitizeResult import SanitizeResult
 from darknet import detectionImage
 
 app = Flask(__name__)
@@ -53,7 +54,7 @@ def upload_movie_url():
     _transcript = TranscriptNarration(gsutilpath)
     transcript_result = AnalyzedDescription(_transcript)
     result = {
-        'transcript_result': transcript_result    
+        'transcript_result': transcript_result
     }
     return jsonify(result)
 
@@ -68,7 +69,6 @@ def upload_thumb_url():
         'detection': 'detected'
     }
     return jsonify(result)
-
 
 
 if __name__ == '__main__':
