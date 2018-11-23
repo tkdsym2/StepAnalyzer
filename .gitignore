@@ -5,3 +5,4 @@ uploads/
 audiofile/
 mp3/
 download/
+*.pyc

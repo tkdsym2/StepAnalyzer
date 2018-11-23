@@ -4,9 +4,9 @@ from janome.tokenfilter import POSKeepFilter
 import re
 
 token = Tokenizer()
-auxiliary_filters = [POSKeepFilter(['助動詞'])]
+auxiliary_filters = [POSKeepFilter([u'助動詞'])]
 auxiliary_analyzer = Analyzer([], token, auxiliary_filters)
-noun_filters = [POSKeepFilter(['名詞'])]
+noun_filters = [POSKeepFilter([u'名詞'])]
 noun_analyzer = Analyzer([], token, noun_filters)
 
 
