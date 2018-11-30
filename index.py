@@ -8,9 +8,10 @@ from AudioToText import TranscriptNarration
 from ExtractAudio import GetAudio
 from Downloader import DownloadMovie, DownloadThumb
 from UploadStorage import UploadGStorage
-# from Yolo import detectionImage
+from ExtractImage import MovieToFrame
 from SanitizeResult import SanitizeResult
-from darknet import detectionImage
+from BackgroundSubstraction import GetDiffPoint
+# from darknet import detectionImage
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -44,7 +45,7 @@ def upload_url():
     return jsonify(result)
 
 
-@app.route('/analyze/narration', method=['POST'])
+@app.route('/analyze/narration', methods=['POST'])
 def upload_movie_url():
     movie_url = request.form['movie_url']
     movie_filepath = DownloadMovie(movie_url)
@@ -59,14 +60,19 @@ def upload_movie_url():
     return jsonify(result)
 
 
-@app.route('/analyze/detection', method=['POST'])
+@app.route('/analyze/detection', methods=['POST'])
 def upload_thumb_url():
-    thumb_url = request.form['thumb_url']
-    thumb_filepath = DownloadThumb(thumb_url)
-    thumb_filename = thumb_url.split('/')[-1].split('.')[0]
-    detection_result = detectionImage(thumb_filepath)
+    # thumb_url = request.form['thumb_url']
+    # thumb_filepath = DownloadThumb(thumb_url)
+    # thumb_filename = thumb_url.split('/')[-1].split('.')[0]
+    # detection_result = detectionImage(thumb_filepath)
+    movie_url = request.form['movie_url']
+    movie_filepath = DownloadMovie(movie_url)
+    movie_filename = movie_url.split('/')[-1].split('.')[0]
+    frame_name = MovieToFrame(movie_filepath, movie_filename)
+    diff_list = GetDiffPoint(frame_name)
     result = {
-        'detection': 'detected'
+        'detection': diff_list
     }
     return jsonify(result)
 
