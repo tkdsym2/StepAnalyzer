@@ -68,4 +68,28 @@ url から動画をダウンロードする．ダウンロートした動画は 
 
 #### Response
 
-編集中...
+```json
+{
+  "detection": {
+    "detected": [],
+    "unknown": [
+      {
+        "points": [],
+        "candidate": {
+          "name": "???",
+          "confidence": 0
+        },
+        "color": "#FF0000"
+      },
+      {
+        "points": [],
+        "candidate": {
+          "name": "???",
+          "confidence": 0
+        },
+        "color": "#FF0000"
+      }
+    ]
+  }
+}
+```
