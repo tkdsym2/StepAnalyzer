@@ -2,7 +2,7 @@
 import json
 
 
-def SanitizeResult(results):
+def SanitizeYOLOResult(results):
     sanitized_result = []
     for result in results:
         _position = []
@@ -15,3 +15,13 @@ def SanitizeResult(results):
         }
         sanitized_result.append(_result)
     return json.dumps(sanitized_result)
+
+
+def CombineResults(diff_list, yolo_list):
+    combined_result = {
+        'detected': [],
+        'unknown': []
+    }
+    for diff in diff_list:
+        combined_result['unknown'].append(diff)
+    return combined_result
