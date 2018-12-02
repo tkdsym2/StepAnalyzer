@@ -9,8 +9,9 @@ from ExtractAudio import GetAudio
 from Downloader import DownloadMovie, DownloadThumb
 from UploadStorage import UploadGStorage
 from ExtractImage import MovieToFrame
-from SanitizeResult import SanitizeResult
+from SanitizeResult import SanitizeYOLOResult, CombineResults
 from BackgroundSubstraction import GetDiffPoint
+from ImagePlotter import DrawingDetectonRect
 # from darknet import detectionImage
 
 app = Flask(__name__)
@@ -71,8 +72,11 @@ def upload_thumb_url():
     movie_filename = movie_url.split('/')[-1].split('.')[0]
     frame_name = MovieToFrame(movie_filepath, movie_filename)
     diff_list = GetDiffPoint(frame_name)
+    yolo_detected_list = []
+    combined_result = CombineResults(diff_list, yolo_detected_list)
+    DrawingDetectonRect(frame_name, movie_filename, diff_list)
     result = {
-        'detection': diff_list
+        'detection': combined_result
     }
     return jsonify(result)
 
