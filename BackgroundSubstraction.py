@@ -27,7 +27,7 @@ def GetDiffPoint(filepath):
     diff_list = []
     for i, c in enumerate(cnts):
         (x, y, w, h) = cv2.boundingRect(c)
-        if w <= 80 or h <= 80:
+        if w <= 30 or h <= 30:
             continue
         point_object = {
             'x': x,
