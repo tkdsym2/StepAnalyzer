@@ -54,7 +54,7 @@ python-dateutil==2.7.2
 pytz==2018.4
 PyWavelets==1.0.1
 requests==2.19.1
-rsa==4.0
+rsa==4.1
 scikit-image==0.14.1
 scipy==1.1.0
 selenium==3.141.0
