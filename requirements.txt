@@ -34,7 +34,7 @@ Janome==0.3.6
 Jinja2==2.10
 kiwisolver==1.0.1
 lazy-object-proxy==1.3.1
-lxml==4.2.1
+lxml==4.6.3
 MarkupSafe==1.0
 matplotlib==2.2.2
 mccabe==0.6.1
